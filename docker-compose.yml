@@ -86,6 +86,24 @@ services:
       - influxdb
       - telegraf
 
+  # Define a grafana service
+  grafana:
+    build:
+      context: ./images/grafana/
+      dockerfile: ./${TYPE}/Dockerfile
+      args:
+        GRAFANA_TAG: ${GRAFANA_TAG}
+    image: "grafana/grafana"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/etc/:/etc/grafana
+      - ./grafana/data/:/var/lib/grafana
+    links:
+      - influxdb
+    depends_on:
+      - influxdb
+
   documentation:
     build:
       context: ./documentation
